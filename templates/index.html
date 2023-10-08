@@ -285,23 +285,36 @@
         <script src="{% static 'libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js' %}"></script>
 
         <!-- init -->
+        <style>/* Add word-wrap styles for DataTables */
+            .dt-wrap {
+                word-wrap: break-word;
+                white-space: normal !important;
+            }</style>
         <script>
             $(document).ready(function() {
                 $(".datatable").DataTable({
-                    ajax : {
-                        url :'',
-                        data:function(d){
-                            d.search = $("#Searchbar").val()
-                        }
-                        dataSrc : ''
+                    ajax: {
+                        url: "{% url 'search-result-list' %}", // URL for fetching data
+                        data: function(d) {
+                            d.search = $("#Searchbar").val(); // Include search query as a parameter
+                        },
+                        dataSrc: '' // Specify the property containing the data
                     },
-                    columns :[
+                    columns: [
+                        { data: 'author' }, // Define columns and map to JSON keys
+                        { data: 'title' },
+                        { data: 'extension' },
+                        { data: 'uniqueId' },
+                        // Add other columns as needed
                     ],
-                    columnDef : [
-                    ],
-                    responsive: !1
-                })
-            })
+                    columnDefs: [
+                    {
+                        targets: '_all', // Apply word wrapping to all columns
+                        className: 'dt-wrap' // Apply the custom CSS class for word wrapping
+                    }
+                ]
+                });
+            });
         </script>
 
         <!-- Search BTN -->
