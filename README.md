@@ -1,4 +1,4 @@
-<h1 align="center">Project Name</h1>
+<h1 align="center">Libgen Django Project</h1>
 
 <p align="center">
   <img src="project-logo.png" alt="Project Logo" width="200" height="200">
