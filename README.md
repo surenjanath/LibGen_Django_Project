@@ -24,7 +24,7 @@
 
 ## About
 
-Briefly describe your project and its purpose here. Explain what makes it unique or why users would be interested in it.
+
 
 ---
 
@@ -40,7 +40,7 @@ Briefly describe your project and its purpose here. Explain what makes it unique
 
 ## Installation
 
-Provide instructions on how to install and set up your project locally. Include any dependencies and prerequisites. Use code blocks for commands.
+
 
 ```bash
 # Clone the repository
