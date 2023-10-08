@@ -10,8 +10,11 @@ from django.urls import path
 
 
 urlpatterns = [
-    path('search-results/', views.SearchResultListCreateView.as_view(), name='search-result-list'),
-    path('search-queries/', views.SearchQueryListCreateView.as_view(), name='search-query-list'),
+    path('search-results/', views.Search_ResultsListCreateView.as_view(), name='search-result-list'),
+    path('search-queries/', views.Search_QueryListCreateView.as_view(), name='search-query-list'),
+
+
+    path('search-queries/Post/', views.scrape_and_populate, name='search-query-post'),
 
 ]
 urlpatterns = format_suffix_patterns(urlpatterns)

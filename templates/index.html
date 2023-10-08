@@ -49,13 +49,18 @@
 
                             <div data-countdown="2023/12/31" class="counter-number mt-5"></div>
 
-                            <form class="app-search mt-3 mx-auto">
+                            {% comment %} <form class="app-search mt-3 mx-auto">
                                 <div class="position-relative">
                                     <input type="text" class="form-control" placeholder="Enter your email address">
                                     <button class="btn btn-primary" type="button"><i class="bx bx-paper-plane align-middle"></i></button>
                                 </div>
-                            </form>
-
+                            </form>                        <!-- App Search--> {% endcomment %}
+                            <div class="app-search d-none d-lg-block mt-3 mx-auto">
+                                <div class="position-relative">
+                                    <input type="text" class="form-control" placeholder="Search..." id="querySearch">
+                                    <button class="btn btn-primary" type="text" id="querySearch_btn"><i class="bx bx-search-alt align-middle"></i></button>
+                                </div>
+                            </div>
 
                         <div class="row">
                             <div class="col-lg-12">
@@ -67,22 +72,26 @@
                                             <table class="table align-middle datatable dt-responsive table-check nowrap" style="border-collapse: collapse; border-spacing: 0 4px; width: 90%; ">
                                                 <thead>
                                                     <tr class="bg-transparent">
-                                                        <th style="width: 30px;">
-                                                            <div class="form-check font-size-16">
-                                                                <input type="checkbox" name="check" class="form-check-input" id="checkAll">
-                                                                <label class="form-check-label" for="checkAll"></label>
-                                                            </div>
-                                                        </th>
-                                                        <th style="width: 120px;">Invoice ID</th>
+                                                        {% comment %} <th style="width: 120px;">Invoice ID</th>
                                                         <th>Date</th>
                                                         <th>Billing Name</th>
                                                         <th>Amount</th>
                                                         <th>Status</th>
                                                         <th style="width: 150px;">Download Pdf</th>
+
+                                                        {% comment %} <th>ID</th> {% endcomment %}
+                                                        <th>Author</th>
+                                                        <th>Title</th>
+                                                        {% comment %} <th>Publisher</th> {% endcomment %}
+                                                        <th>Year</th>
+                                                        {% comment %} <th>Pages</th> {% endcomment %}
+                                                        {% comment %} <th>Language</th> {% endcomment %}
+                                                        {% comment %} <th>Size</th> {% endcomment %}
+                                                        {% comment %} <th>Extension</th> {% endcomment %}
                                                         <th style="width: 90px;">Action</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody>
+                                                {% comment %} <tbody>
 
                                                     <tr>
                                                         <td>
@@ -239,7 +248,7 @@
                                                     </tr>
 
 
-                                                </tbody>
+                                                </tbody> {% endcomment %}
                                             </table>
                                         </div>
                                         <!-- end table responsive -->
@@ -263,20 +272,9 @@
         <!-- JAVASCRIPT -->
         <script src="{% static 'libs/jquery/dist/jquery.min.js' %}"></script>
         <script src="{% static 'libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
-        <script src="{% static 'libs/metismenu/dist/metisMenu.min.js' %}"></script>
         <script src="{% static 'libs/simplebar/dist/simplebar.min.js' %}"></script>
         <script src="{% static 'libs/node-waves/dist/waves.min.js' %}"></script>
         <script src="{% static 'libs/feather-icons/dist/feather.min.js' %}"></script>
-        <!-- pace js -->
-        <script src="{% static 'libs/pace-js/pace.min.js' %}"></script>
-        <!-- swiper js -->
-        <script src="{% static 'libs/swiper/swiper-bundle.min.js' %}"></script>
-        <!-- Plugins js-->
-        <script src="{% static 'libs/jquery-countdown/dist/jquery.countdown.min.js' %}"></script>
-
-
-
-        <script src="{% static 'libs/flatpickr/dist/flatpickr.min.js' %}"></script>
 
         <!-- Required datatable js -->
         <script src="{% static 'libs/datatables.net/js/jquery.dataTables.min.js' %}"></script>
@@ -304,6 +302,31 @@
                     responsive: !1
                 })
             })
+        </script>
+
+        <!-- Search BTN -->
+        <script>
+            $(document).ready(function() {
+                $("#querySearch_btn").on("click", function() {
+                    // Get the query input value
+                    var query = $("#querySearch").val();
+
+                    // Make an AJAX POST request to your Django view
+                    $.ajax({
+                        url: "{% url 'search-query-post' %}",
+                        method: 'POST',
+                        data: { query: query },
+                        success: function(data) {
+                            console.log("AJAX Request Success:", data);
+                            // Handle the response from the server here
+                        },
+                        error: function(error) {
+                            console.error("AJAX Request Error:", error);
+                            // Handle errors here
+                        }
+                    });
+                });
+            });
         </script>
   </body>
 </html>

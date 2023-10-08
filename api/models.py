@@ -40,8 +40,8 @@ class Search_Results(models.Model):
     author                  = models.CharField(blank=True, null=True,max_length=100 )
     title                   = models.CharField(max_length=255)
     publisher               = models.CharField(max_length=255)
-    year                    = models.IntegerField()
-    pages                   = models.IntegerField()
+    year                    = models.CharField(max_length=255)
+    pages                   = models.CharField(max_length=255)
     language                = models.CharField(max_length=50)
     size                    = models.CharField(max_length=20)
     extension               = models.CharField(max_length=10)
@@ -58,7 +58,7 @@ class Search_Results(models.Model):
     last_updated    = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
-        return '{} - {} | {}'.format(self.author, self.searchquery.entry_id, self.uniqueId)
+        return '{} - ({}) | {}'.format(self.title, self.searchquery.query, self.uniqueId)
 
     class Meta:
         ordering = ['date_created']
@@ -69,9 +69,9 @@ class Search_Results(models.Model):
 
         if self.uniqueId is None:
             self.uniqueId = str(uuid4()).split('-')[4]
-            self.slug = slugify('{} - {} | {}'.format(self.author, self.entry.entry_id, self.uniqueId))
+            self.slug = slugify('{} - ({}) | {}'.format(self.title, self.searchquery.query, self.uniqueId))
 
-        self.slug = slugify('{} - {} | {}'.format(self.author, self.entry.entry_id, self.uniqueId))
+        self.slug = slugify('{} - ({}) | {}'.format(self.title, self.searchquery.query, self.uniqueId))
         self.last_updated = timezone.localtime(timezone.now())
 
-        super(Tablet_Comment, self).save(*args, **kwargs)
+        super(Search_Results, self).save(*args, **kwargs)
