@@ -201,7 +201,7 @@
                                                                     {% comment %} <th>Pages</th> {% endcomment %}
                                                                     {% comment %} <th>Language</th> {% endcomment %}
                                                                     {% comment %} <th>Size</th> {% endcomment %}
-                                                                    <th>Extension</th>
+                                                                    <th>Size</th>
                                                                     <th style="width: 90px;">Action</th>
                                                                 </tr>
                                                             </thead>
@@ -209,6 +209,29 @@
                                                         </table>
                                                     </div>
                                                     <!-- end table responsive -->
+                                                    <!-- Modal -->
+                                                    <div class="modal fade" id="downloadModal" tabindex="-1" role="dialog" aria-labelledby="downloadModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="downloadModalLabel">Download Details</h5>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <p id="downloadInfo"></p>
+                                                                    <div id="downloadProgress">
+                                                                        <div class="progress">
+                                                                            <div class="progress-bar" id="progressBar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                                                        </div>
+                                                                        <div class="progress-label">0%</div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <!-- end card body -->
                                             </div>
@@ -272,12 +295,28 @@
                         },
                         dataSrc: '' // Specify the property containing the data
                     },
+                    pageLength: 5,
+                    lengthMenu: [5, 10, 25, 50, 100],
                     columns: [
                         { data: 'author' }, // Define columns and map to JSON keys
                         { data: 'title' },
                         { data: 'year'},
-                        { data: 'extension' },
-                        { data: 'uniqueId' },
+                        { data: 'size' },
+                        {
+                            data: 'uniqueId',
+                            render: function(data, type, full, meta) {
+                                if (type === 'display') {
+                                    var extension = full.extension.toUpperCase();
+                                    var downloadInfo = extension + ' (' + data + ')'; // Combine extension and uniqueId
+
+                                    return '<div>' +
+                                        '<button type="button" class="btn btn-soft-light btn-sm w-xs waves-effect btn-label waves-light open-modal" data-download-id="' + data + '" data-download-info="' + downloadInfo + '">' +
+                                        '<i class="bx bx-download label-icon"></i>'+extension+'</button>' +
+                                        '</div>';
+                                }
+                                return data;
+                            }
+                        }
                         // Add other columns as needed
                     ],
                     columnDefs: [
@@ -305,6 +344,72 @@
                             // Handle errors here
                         }
                     });
+                });
+
+                const downloadFile = (blob, fileName) => {
+                    const link = document.createElement('a');
+                    // create a blobURI pointing to our Blob
+                    link.href = URL.createObjectURL(blob);
+                    link.download = fileName;
+                    // some browser needs the anchor to be in the doc
+                    document.body.append(link);
+                    link.click();
+                    link.remove();
+                    // in case the Blob uses a lot of memory
+                    setTimeout(() => URL.revokeObjectURL(link.href), 7000);
+                  };
+
+                $(document).on('click', '.open-modal', function() {
+                    var downloadId = $(this).data('download-id');
+                    var downloadInfo = $(this).data('download-info');
+                    $('#progressBar').width(0 + '%');
+                    // Set the modal content
+                    $('#downloadInfo').text(downloadInfo);
+
+                    // Open the modal
+                    $('#downloadModal').modal('show');
+
+                    // Start the download and track progress
+                    $.ajax({
+                        url: "{% url 'getFile' %}", // Replace with the actual backend download endpoint
+                        data: { id: downloadId },
+                        xhr: function() {
+                            var xhr = new window.XMLHttpRequest();
+
+                            // Listen for progress events
+                            xhr.upload.addEventListener('progress', function(evt) {
+                                if (evt.lengthComputable) {
+                                    var percentComplete = (evt.loaded / evt.total) * 100;
+                                    $('#progressBar').width(percentComplete + '%');
+                                    $('.progress-label').text(percentComplete + '%');
+                                }
+                            }, false);
+
+                            return xhr;
+                        },
+                        success: function(data) {
+                            // Handle success
+                            console.log('Download completed');
+                            $('#progressBar').width('100%');
+                            $('.progress-label').text('100%');
+                            // You can close the modal or perform other actions here.
+                            if (data.progress === 100) {
+                                // Download completed, open the file in a new tab
+                                console.log('Download completed');
+                                var blob = new Blob([data], { type: 'application/octet-stream' }); // Change the content type as needed
+
+                                // Use the downloadFile function to open the file in a new tab
+                                downloadFile(blob, 'downloaded_file.pdf');
+                            }
+
+                        },
+                        error: function(error) {
+                            // Handle errors
+                            console.error('Download error:', error);
+                            // You can handle errors here.
+                        }
+                    });
+
                 });
             });
         </script>
