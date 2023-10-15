@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup as bs
 import pandas as pd
+import re
 
 def LibgenScraper(session, query, headers):
 
@@ -22,17 +23,20 @@ def LibgenScraper(session, query, headers):
         "column": "def"
     }
     r = session.get(MAIN_URL + url, headers=headers,  params=data)
-
+    print('req : ', r.content)
     if r.status_code == 200:
         soup = bs(r.content, 'lxml')
-        df = pd.read_html(r.content)[-2]
-        df.columns = df.iloc[0]
-        df = df[1:]
-        if df.__len__()>0:
-            # Assuming the table you want has a specific ID, replace 'table_id' with the actual ID
-            table = soup.find_all('table')[2]
+        table = soup.find('table', {'class':"c"})
+        if table:
+            df = pd.read_html(str(table))[0]
+            df.columns = df.iloc[0]
+            df = df[1:]
+            df['Year'] = df['Year'].fillna("N/A")
+            pattern = r'\[.*?\]|\b\d{3}-\d{1,5}-\d{1,7}-\d\b'
 
-            if table:
+            df['Title'] = df['Title'].apply(lambda x : re.sub(pattern, '', x).strip())
+
+            if df.__len__()>0:
                 results = table.find_all('tr')[1:]
                 if results != [] :
                     DAATA = []
@@ -44,17 +48,20 @@ def LibgenScraper(session, query, headers):
                             pass
                         else:
                             print('[*] ID : ', id)
-                            URLID = i.find('td', {'width':'500'}).find('a', {'id':id}).get('href')
+                            inf = i.find('td', {'width':'500'}).find('a', {'id':id})
+                            URLID = inf.get('href')
+
                             data['Link'] =MAIN_URL + URLID
                             data['md5_ID'] = URLID.split('md5=')[-1]
                             print(data)
                             DAATA.append(data)
                     links= pd.DataFrame(DAATA)
                     df = df.merge(right=links, how='inner')
+
             else:
-                return {'status':'403',"message":'No Data', 'results':[]} # No Results
+                return {'status':'402',"message":'No Data', 'results':[]} # No Table Found
         else:
-            return {'status':'402',"message":'No Data', 'results':[]} # No Table Found
+            return {'status':'403',"message":'No Data', 'results':[]} # No Results
 
     if df.__len__()>0:
         return {'status':'200',"message":'success', 'results': df.to_dict('records')}

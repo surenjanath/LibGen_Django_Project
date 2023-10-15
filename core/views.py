@@ -6,4 +6,6 @@ from django.views import View
 
 class DashboardView(View):
     def get(self, request):
-        return render(request, 'index.html')
+        context = {}
+        context['PAGE_TITLE'] = [x for x in 'LDP']
+        return render(request, 'index.html', context=context)

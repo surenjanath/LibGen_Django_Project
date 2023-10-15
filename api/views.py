@@ -52,7 +52,7 @@ def scrape_and_populate(request):
 
         # Call your scraping function
         scraping_result = LibgenScraper(session,query=query, headers=headers)
-
+        print(scraping_result)
         if scraping_result['status'] == '200':
             # If scraping was successful, populate the database
             results = scraping_result['results']
@@ -81,7 +81,6 @@ def scrape_and_populate(request):
             return JsonResponse({
                 'status': 'success',
                 'message': 'Data successfully scraped and populated to the database',
-                'results': scraping_result['results'],
                 # 'download_links': download_links,
             })
 

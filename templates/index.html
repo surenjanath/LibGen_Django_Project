@@ -32,6 +32,73 @@
 
         <!-- Responsive datatable examples -->
         <link href="{% static 'libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />
+
+        <style>
+            #querySearch {
+                color: red;
+                background-color: blue;
+            }
+            #table-Results {
+                color:black;
+                background-color: rgba(192, 192, 192, 0.8);
+            }
+
+            <!--Customized Title-->
+            .overlay {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 20vh;
+                z-index: 100;
+
+                background: rgb(255, 255, 255);
+                background: linear-gradient(
+                    0deg,
+                    rgba(255, 255, 255, 1) 75%,
+                    rgba(255, 255, 255, 0.9) 80%,
+                    rgba(255, 255, 255, 0.25) 95%,
+                    rgba(255, 255, 255, 0) 100%
+                );
+            }
+
+            .text {
+                font-family: "Yanone Kaffeesatz";
+                font-size: 60px;
+                display: flex;
+                position: absolute;
+                bottom: 20vh;
+                left: 50%;
+                transform: translateX(-50%);
+                user-select: none;
+
+                .wrapper {
+                    padding-left: 20px;
+                    padding-right: 20px;
+                    padding-top: 20px;
+                    .letter {
+                        transition: ease-out 1s;
+                        transform: translateY(40%);
+                    }
+                    .shadow {
+                        transform: scale(1, -1);
+                        color: #999;
+                        transition: ease-in 2s, ease-out 2s;
+                    }
+                    &:hover {
+                        .letter {
+                            transform: translateY(-200%);
+                        }
+                        .shadow {
+                            opacity: 0;
+                            transform: translateY(200%);
+                        }
+                    }
+                }
+            }
+
+
+        </style>
     </head>
 
     <body>
@@ -39,228 +106,133 @@
     <!-- <body data-layout="horizontal"> -->
 
         <div class="min-vh-90 py-1 px-1 py-sm-1">
-            <div class="bg-overlay bg-primary"></div>
+            <div class="bg-overlay "></div>
             <div class="container">
                 <div class="row justify-content-center">
-                    <div class="col-lg-8">
-                        <div class="text-center py-1 py-sm-1">
-                            <h3 class="text-white mt-5">Libgen Django Project</h3>
-                            <p class="text-white-50 font-size-16">Just Search for your book and viola! Download..</p>
 
-                            <div data-countdown="2023/12/31" class="counter-number mt-5"></div>
-
-                            {% comment %} <form class="app-search mt-3 mx-auto">
-                                <div class="position-relative">
-                                    <input type="text" class="form-control" placeholder="Enter your email address">
-                                    <button class="btn btn-primary" type="button"><i class="bx bx-paper-plane align-middle"></i></button>
-                                </div>
-                            </form>                        <!-- App Search--> {% endcomment %}
-                            <div class="app-search d-none d-lg-block mt-3 mx-auto">
-                                <div class="position-relative">
-                                    <input type="text" class="form-control" placeholder="Search..." id="querySearch">
-                                    <button class="btn btn-primary" type="text" id="querySearch_btn"><i class="bx bx-search-alt align-middle"></i></button>
-                                </div>
-                            </div>
-
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <!-- end row -->
-
-                                        <div class="table-responsive" style="scale:90%;">
-                                            <table class="table align-middle datatable dt-responsive table-check nowrap" style="border-collapse: collapse; border-spacing: 0 4px; width: 90%; ">
-                                                <thead>
-                                                    <tr class="bg-transparent">
-                                                        {% comment %} <th style="width: 120px;">Invoice ID</th>
-                                                        <th>Date</th>
-                                                        <th>Billing Name</th>
-                                                        <th>Amount</th>
-                                                        <th>Status</th>
-                                                        <th style="width: 150px;">Download Pdf</th>
-
-                                                        {% comment %} <th>ID</th> {% endcomment %}
-                                                        <th>Author</th>
-                                                        <th>Title</th>
-                                                        {% comment %} <th>Publisher</th> {% endcomment %}
-                                                        <th>Year</th>
-                                                        {% comment %} <th>Pages</th> {% endcomment %}
-                                                        {% comment %} <th>Language</th> {% endcomment %}
-                                                        {% comment %} <th>Size</th> {% endcomment %}
-                                                        {% comment %} <th>Extension</th> {% endcomment %}
-                                                        <th style="width: 90px;">Action</th>
-                                                    </tr>
-                                                </thead>
-                                                {% comment %} <tbody>
-
-                                                    <tr>
-                                                        <td>
-                                                            <div class="form-check font-size-16">
-                                                                <input type="checkbox" class="form-check-input">
-                                                                <label class="form-check-label"></label>
-                                                            </div>
-                                                        </td>
-
-                                                        <td><a href="javascript: void(0);" class="text-dark fw-medium">#MN0215</a> </td>
-                                                        <td>
-                                                            12 Oct, 2020
-                                                        </td>
-                                                        <td>Connie Franco</td>
-
-                                                        <td>
-                                                            $26.30
-                                                        </td>
-                                                        <td>
-                                                            <div class="badge badge-soft-success font-size-12">Paid</div>
-                                                        </td>
-                                                        <td>
-                                                            <div>
-                                                                <button type="button" class="btn btn-soft-light btn-sm w-xs waves-effect btn-label waves-light"><i class="bx bx-download label-icon"></i> Pdf</button>
-                                                            </div>
-                                                        </td>
-
-                                                        <td>
-                                                            <div class="dropdown">
-                                                                <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="bx bx-dots-horizontal-rounded"></i>
-                                                                </button>
-                                                                <ul class="dropdown-menu dropdown-menu-end">
-                                                                    <li><a class="dropdown-item" href="#">Edit</a></li>
-                                                                    <li><a class="dropdown-item" href="#">Print</a></li>
-                                                                    <li><a class="dropdown-item" href="#">Delete</a></li>
-                                                                </ul>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <div class="form-check font-size-16">
-                                                                <input type="checkbox" class="form-check-input">
-                                                                <label class="form-check-label"></label>
-                                                            </div>
-                                                        </td>
-
-                                                        <td><a href="javascript: void(0);" class="text-dark fw-medium">#MN0214</a> </td>
-                                                        <td>
-                                                            11 Oct, 2020
-                                                        </td>
-                                                        <td>Paul Reynolds</td>
-
-                                                        <td>
-                                                            $24.20
-                                                        </td>
-                                                        <td>
-                                                            <div class="badge badge-soft-success font-size-12">Paid</div>
-                                                        </td>
-                                                        <td>
-                                                            <div>
-                                                                <button type="button" class="btn btn-soft-light btn-sm w-xs waves-effect btn-label waves-light"><i class="bx bx-download label-icon"></i> Pdf</button>
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="dropdown">
-                                                                <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="bx bx-dots-horizontal-rounded"></i>
-                                                                </button>
-                                                                <ul class="dropdown-menu dropdown-menu-end">
-                                                                    <li><a class="dropdown-item" href="#">Edit</a></li>
-                                                                    <li><a class="dropdown-item" href="#">Print</a></li>
-                                                                    <li><a class="dropdown-item" href="#">Delete</a></li>
-                                                                </ul>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <div class="form-check font-size-16">
-                                                                <input type="checkbox" class="form-check-input">
-                                                                <label class="form-check-label"></label>
-                                                            </div>
-                                                        </td>
-
-                                                        <td><a href="javascript: void(0);" class="text-dark fw-medium">#MN0213</a> </td>
-                                                        <td>
-                                                            10 Oct, 2020
-                                                        </td>
-                                                        <td>Ronald Patterson</td>
-
-                                                        <td>
-                                                            $20.20
-                                                        </td>
-                                                        <td>
-                                                            <div class="badge badge-soft-warning font-size-12">Pending</div>
-                                                        </td>
-                                                        <td>
-                                                            <div>
-                                                                <button type="button" class="btn btn-soft-light btn-sm w-xs waves-effect btn-label waves-light"><i class="bx bx-download label-icon"></i> Pdf</button>
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="dropdown">
-                                                                <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="bx bx-dots-horizontal-rounded"></i>
-                                                                </button>
-                                                                <ul class="dropdown-menu dropdown-menu-end">
-                                                                    <li><a class="dropdown-item" href="#">Edit</a></li>
-                                                                    <li><a class="dropdown-item" href="#">Print</a></li>
-                                                                    <li><a class="dropdown-item" href="#">Delete</a></li>
-                                                                </ul>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>
-                                                            <div class="form-check font-size-16">
-                                                                <input type="checkbox" class="form-check-input">
-                                                                <label class="form-check-label"></label>
-                                                            </div>
-                                                        </td>
-
-                                                        <td><a href="javascript: void(0);" class="text-dark fw-medium">#MN0212</a> </td>
-                                                        <td>
-                                                            09 Oct, 2020
-                                                        </td>
-                                                        <td>Adella Perez</td>
-
-                                                        <td>
-                                                            $16.80
-                                                        </td>
-                                                        <td>
-                                                            <div class="badge badge-soft-success font-size-12">Paid</div>
-                                                        </td>
-                                                        <td>
-                                                            <div>
-                                                                <button type="button" class="btn btn-soft-light btn-sm w-xs waves-effect btn-label waves-light"><i class="bx bx-download label-icon"></i> Pdf</button>
-                                                            </div>
-                                                        </td>
-                                                        <td>
-                                                            <div class="dropdown">
-                                                                <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                                    <i class="bx bx-dots-horizontal-rounded"></i>
-                                                                </button>
-                                                                <ul class="dropdown-menu dropdown-menu-end">
-                                                                    <li><a class="dropdown-item" href="#">Edit</a></li>
-                                                                    <li><a class="dropdown-item" href="#">Print</a></li>
-                                                                    <li><a class="dropdown-item" href="#">Delete</a></li>
-                                                                </ul>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
+                    <div class="row">
 
 
-                                                </tbody> {% endcomment %}
-                                            </table>
+
+                        <div class="col-lg-12">
+
+                            <div class="card">
+
+                                <div class="card-body">
+
+
+
+                                    <div class="row justify-content-center mt-3">
+
+                                        <div class="col-xl-5 col-lg-8">
+                                            <div class="card-body">
+                                                <div class="overlay"></div>
+
+                                                <div class="text">
+                                                    <div class="wrapper">
+                                                        <div id="L" class="letter">L</div>
+                                                        <div class="shadow">L</div>
+                                                    </div>
+                                                    <div class="wrapper">
+                                                        <div id="D" class="letter">D</div>
+                                                        <div class="shadow">D</div>
+                                                    </div>
+                                                    <div class="wrapper">
+                                                        <div id="P" class="letter">P</div>
+                                                        <div class="shadow">P</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="text-center">
+
+
+
+
+
+
+                                                <h3 class="mt-5">Libgen Django Project</h3>
+                                                <p class="text-muted">A webscraping Projects for EBOOKS online. Scrapes <a href="https://libgen.rs/">https://libgen.rs/</a></p>
+                                                <div>
+                                                    <button type="button" class="btn btn-primary mt-2 me-2 waves-effect waves-light">Contact Me @PythologyProdigy</button>
+                                                    {% comment %} <button type="button" class="btn btn-success mt-2 waves-effect waves-light">Send us a
+                                                        tweet</button> {% endcomment %}
+                                                </div>
+
+                                                <div class="row justify-content-center">
+
+                                                    <p class="font-size-16 mt-4">Just Search for your book and viola! Download..</p>
+
+                                                    <div class="app-search d-none d-lg-block mt-3 mx-auto">
+                                                        <div class="position-relative">
+                                                            <input type="text" class="form-control" placeholder="Search..." id="querySearch" >
+                                                            <button class="btn btn-primary" type="text" id="querySearch_btn"><i class="bx bx-search-alt align-middle"></i></button>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
                                         </div>
-                                        <!-- end table responsive -->
+                                        <!-- end col -->
                                     </div>
-                                    <!-- end card body -->
+                                    <!-- end row -->
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="card">
+                                                <div class="card-body" id="table-Results">
+                                                    <!-- end row -->
+
+                                                    <div >
+                                                        <table class="table datatable nowrap cell-border"  style="border-collapse: collapse; border-spacing: 0 4px; width: 90%; scale:90%; ">
+                                                            <thead>
+                                                                <tr class="bg-transparent">
+                                                                    {% comment %} <th style="width: 120px;">Invoice ID</th>
+                                                                    <th>Date</th>
+                                                                    <th>Billing Name</th>
+                                                                    <th>Amount</th>
+                                                                    <th>Status</th>
+                                                                    <th style="width: 150px;">Download Pdf</th>
+
+                                                                    {% comment %} <th>ID</th> {% endcomment %}
+                                                                    <th>Author</th>
+                                                                    <th>Title</th>
+                                                                    {% comment %} <th>Publisher</th> {% endcomment %}
+                                                                    <th>Year</th>
+                                                                    {% comment %} <th>Pages</th> {% endcomment %}
+                                                                    {% comment %} <th>Language</th> {% endcomment %}
+                                                                    {% comment %} <th>Size</th> {% endcomment %}
+                                                                    <th>Extension</th>
+                                                                    <th style="width: 90px;">Action</th>
+                                                                </tr>
+                                                            </thead>
+
+                                                        </table>
+                                                    </div>
+                                                    <!-- end table responsive -->
+                                                </div>
+                                                <!-- end card body -->
+                                            </div>
+                                            <!-- end card -->
+                                        </div>
+                                        <!-- end col -->
+                                    </div>
+                                    <!-- end row -->
                                 </div>
-                                <!-- end card -->
+                                <!-- end  card body -->
                             </div>
-                            <!-- end col -->
+                            <!-- end card -->
+                            <div class="text-center py-1 py-sm-1">
+
+
+                            </div>
                         </div>
-                        </div>
+                        <!-- end col -->
+
+
+
                     </div>
+
+
                     <!-- end col -->
                 </div>
                 <!-- end row -->
@@ -285,14 +257,14 @@
         <script src="{% static 'libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js' %}"></script>
 
         <!-- init -->
-        <style>/* Add word-wrap styles for DataTables */
+        <style>
             .dt-wrap {
                 word-wrap: break-word;
                 white-space: normal !important;
             }</style>
         <script>
             $(document).ready(function() {
-                $(".datatable").DataTable({
+                var Table = $(".datatable").DataTable({
                     ajax: {
                         url: "{% url 'search-result-list' %}", // URL for fetching data
                         data: function(d) {
@@ -303,6 +275,7 @@
                     columns: [
                         { data: 'author' }, // Define columns and map to JSON keys
                         { data: 'title' },
+                        { data: 'year'},
                         { data: 'extension' },
                         { data: 'uniqueId' },
                         // Add other columns as needed
@@ -314,12 +287,6 @@
                     }
                 ]
                 });
-            });
-        </script>
-
-        <!-- Search BTN -->
-        <script>
-            $(document).ready(function() {
                 $("#querySearch_btn").on("click", function() {
                     // Get the query input value
                     var query = $("#querySearch").val();
@@ -331,7 +298,7 @@
                         data: { query: query },
                         success: function(data) {
                             console.log("AJAX Request Success:", data);
-                            // Handle the response from the server here
+                            Table.ajax.reload();
                         },
                         error: function(error) {
                             console.error("AJAX Request Error:", error);
