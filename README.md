@@ -52,6 +52,10 @@ git clone https://github.com/surenjanath/LibGen_Django_Project.git
 # Change to project directory
 cd LibGen_Django_Project
 
+# You can run my automated script that will create a venv and install libraries and also run the project.
+python automated_Script.py
+
+# Manual
 # Create a virtual environment (optional but recommended)
 python -m venv venv
 
