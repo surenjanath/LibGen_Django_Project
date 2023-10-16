@@ -13,7 +13,7 @@
 - Please Note that this Project is still being under development... [ 10th October 2023 ]
 ---
 Youtube Video For Installation and Demonstration : <br>
-[![Video Thumbnail](https://www.youtube.com/watch?v=WOva810AMw0)](https://www.youtube.com/watch?v=WOva810AMw0)
+[![Video Thumbnail](https://github.com/surenjanath/LibGen_Django_Project/assets/42503383/2b63fd97-9017-42f3-af68-c9d7a99e4bf3)](https://www.youtube.com/watch?v=WOva810AMw0)
 
 ## Table of Contents
 
