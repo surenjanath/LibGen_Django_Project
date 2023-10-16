@@ -1,15 +1,16 @@
 <h1 align="center">Libgen Django Project</h1>
 
 <p align="center">
-  <img src="project-logo.png" alt="Project Logo" width="200" height="200">
+  <img src="https://github.com/surenjanath/LibGen_Django_Project/assets/42503383/2b63fd97-9017-42f3-af68-c9d7a99e4bf3" alt="Project Logo" width="200" height="200">
 </p>
 
 <p align="center">
-  A powerful Django-based search analytics platform to uncover hidden insights!
+  This Project is a webscraper that scrapes the libgen ebook website . Just run the project and click on search with your query. The Modal will have your download links.
 </p>
 
 ---
-### Please Note that this Project is still being under development...
+- Project is Usable [ 15th October 2023 ]
+- Please Note that this Project is still being under development... [ 10th October 2023 ]
 ---
 
 ## Table of Contents
@@ -32,10 +33,10 @@
 
 ## Features
 
-- **Search Analytics:** Gain insights into user search behavior.
-- **Most Searched Queries:** Discover the top queries users are searching for.
-- **Search Trends:** Visualize search trends over time.
-- **User Engagement:** Measure user interaction with the search feature.
+- **Search Analytics:** Gain insights into user search behavior. [ Coming Soon ]
+- **Most Searched Queries:** Discover the top queries users are searching for. [ Coming Soon ]
+- **Search Trends:** Visualize search trends over time. [ Coming Soon ]
+- **User Engagement:** Measure user interaction with the search feature. [ Coming Soon ]
 
 
 ---
@@ -46,10 +47,10 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/yourproject.git
+git clone https://github.com/surenjanath/LibGen_Django_Project.git
 
 # Change to project directory
-cd yourproject
+cd LibGen_Django_Project
 
 # Create a virtual environment (optional but recommended)
 python -m venv venv
