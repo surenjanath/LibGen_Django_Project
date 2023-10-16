@@ -12,8 +12,8 @@
 - Project is Usable [ 15th October 2023 ]
 - Please Note that this Project is still being under development... [ 10th October 2023 ]
 ---
-Youtube Video For Installation and Demonstration : 
-<img src="https://www.youtube.com/watch?v=WOva810AMw0" alt="Project Logo" width="500" height="500">
+Youtube Video For Installation and Demonstration : <br>
+[![Video Thumbnail](https://www.youtube.com/watch?v=WOva810AMw0)](https://www.youtube.com/watch?v=WOva810AMw0)
 
 ## Table of Contents
 
