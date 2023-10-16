@@ -12,6 +12,7 @@ required_libraries = [
     'bs4',
     'djangorestframework',
     'pandas',
+    'lxml'
     # Add other libraries you need here
 ]
 
