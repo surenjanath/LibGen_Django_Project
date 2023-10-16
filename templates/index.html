@@ -12,11 +12,6 @@
         <!-- App favicon -->
         <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}">
 
-        <!-- swiper css -->
-        <link rel="stylesheet" href="{% static '/libs/swiper/swiper-bundle.min.css' %}">
-
-        <!-- preloader css -->
-        <link rel="stylesheet" href="{% static '/css/preloader.min.css' %}" type="text/css" />
 
         <!-- Bootstrap Css -->
         <link href="{% static 'css/bootstrap.min.css' %}" id="bootstrap-style" rel="stylesheet" type="text/css" />
@@ -24,8 +19,6 @@
         <link href="{% static 'css/icons.min.css' %}" rel="stylesheet" type="text/css" />
         <!-- App Css-->
         <link href="{% static 'css/app.min.css' %}" id="app-style" rel="stylesheet" type="text/css" />
-        <!-- flatpickr css -->
-        <link href="{% static 'libs/flatpickr/dist/flatpickr.min.css' %}" rel="stylesheet" type="text/css">
 
         <!-- DataTables -->
         <link href="{% static 'libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css' %}" rel="stylesheet" type="text/css" />
@@ -154,7 +147,7 @@
                                                 <h3 class="mt-5">Libgen Django Project</h3>
                                                 <p class="text-muted">A webscraping Projects for EBOOKS online. Scrapes <a href="https://libgen.rs/">https://libgen.rs/</a></p>
                                                 <div>
-                                                    <button type="button" class="btn btn-primary mt-2 me-2 waves-effect waves-light">Contact Me @PythologyProdigy</button>
+                                                    <a type="button" class="btn btn-primary mt-2 me-2 waves-effect waves-light" target="_blank" href="https://www.youtube.com/channel/UCbDL7RSxZIJnhFBRay-JrWQ">Contact Me @PythologyProdigy</a>
                                                     {% comment %} <button type="button" class="btn btn-success mt-2 waves-effect waves-light">Send us a
                                                         tweet</button> {% endcomment %}
                                                 </div>
@@ -221,12 +214,9 @@
                                                                 </div>
                                                                 <div class="modal-body">
                                                                     <p id="downloadInfo"></p>
-                                                                    <div id="downloadProgress">
-                                                                        <div class="progress">
-                                                                            <div class="progress-bar" id="progressBar" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                                                        </div>
-                                                                        <div class="progress-label">0%</div>
-                                                                    </div>
+                                                                    <ul id="downloadLinksList">
+                                                                        <!-- Links will be populated dynamically here -->
+                                                                    </ul>
 
                                                                 </div>
                                                             </div>
@@ -267,9 +257,7 @@
         <!-- JAVASCRIPT -->
         <script src="{% static 'libs/jquery/dist/jquery.min.js' %}"></script>
         <script src="{% static 'libs/bootstrap/dist/js/bootstrap.bundle.min.js' %}"></script>
-        <script src="{% static 'libs/simplebar/dist/simplebar.min.js' %}"></script>
-        <script src="{% static 'libs/node-waves/dist/waves.min.js' %}"></script>
-        <script src="{% static 'libs/feather-icons/dist/feather.min.js' %}"></script>
+
 
         <!-- Required datatable js -->
         <script src="{% static 'libs/datatables.net/js/jquery.dataTables.min.js' %}"></script>
@@ -359,7 +347,7 @@
                     setTimeout(() => URL.revokeObjectURL(link.href), 7000);
                   };
 
-                $(document).on('click', '.open-modal', function() {
+                  {% comment %} $(document).on('click', '.open-modal', function() {
                     var downloadId = $(this).data('download-id');
                     var downloadInfo = $(this).data('download-info');
                     $('#progressBar').width(0 + '%');
@@ -371,46 +359,71 @@
 
                     // Start the download and track progress
                     $.ajax({
-                        url: "{% url 'getFile' %}", // Replace with the actual backend download endpoint
-                        data: { id: downloadId },
-                        xhr: function() {
-                            var xhr = new window.XMLHttpRequest();
+                      url: "{% url 'getFile' %}", // Replace with the actual backend download endpoint
+                      data: { id: downloadId },
+                      xhr: function() {
+                        var xhr = new window.XMLHttpRequest();
 
-                            // Listen for progress events
-                            xhr.upload.addEventListener('progress', function(evt) {
-                                if (evt.lengthComputable) {
-                                    var percentComplete = (evt.loaded / evt.total) * 100;
-                                    $('#progressBar').width(percentComplete + '%');
-                                    $('.progress-label').text(percentComplete + '%');
-                                }
-                            }, false);
+                        // Listen for progress events
+                        xhr.upload.addEventListener('progress', function(evt) {
+                          if (evt.lengthComputable) {
+                            var percentComplete = (evt.loaded / evt.total) * 100;
+                            $('#progressBar').width(percentComplete + '%');
+                            $('.progress-label').text(percentComplete + '%');
+                          }
+                        }, false);
 
-                            return xhr;
-                        },
-                        success: function(data) {
-                            // Handle success
-                            console.log('Download completed');
-                            $('#progressBar').width('100%');
-                            $('.progress-label').text('100%');
-                            // You can close the modal or perform other actions here.
-                            if (data.progress === 100) {
-                                // Download completed, open the file in a new tab
-                                console.log('Download completed');
-                                var blob = new Blob([data], { type: 'application/octet-stream' }); // Change the content type as needed
+                        return xhr;
+                      },
+                      success: function(data) {
+                        // Handle success
+                        console.log('Download completed');
+                        $('#progressBar').width('100%');
+                        $('.progress-label').text('100%');
 
-                                // Use the downloadFile function to open the file in a new tab
-                                downloadFile(blob, 'downloaded_file.pdf');
-                            }
+                        // Use the jQuery File Download plugin to open the file in a new tab
+                        $('<a href="#" download="downloaded_file.pdf">download</a>').attr('href', window.URL.createObjectURL(new Blob([data], { type: 'application/pdf' }))).appendTo('body')[0].click();
 
-                        },
-                        error: function(error) {
-                            // Handle errors
-                            console.error('Download error:', error);
-                            // You can handle errors here.
-                        }
+                        // You can close the modal or perform other actions here.
+                      },
+                      error: function(error) {
+                        // Handle errors
+                        console.error('Download error:', error);
+                        // You can handle errors here.
+                      }
                     });
+                  }); {% endcomment %}
 
-                });
+
+                  $(document).on('click', '.open-modal', function() {
+                    var downloadId = $(this).data('download-id');
+                    var downloadInfo = $(this).data('download-info');
+                    $('#progressBar').width(0 + '%');
+                    // Set the modal content
+                    $('#downloadInfo').text(downloadInfo);
+
+                    // Start the download and track progress
+                    $.ajax({
+                      url: "{% url 'getFile' %}", // Replace with the actual backend download endpoint
+                      data: { id: downloadId },
+
+                      success: function(data) {
+
+                        $('#downloadModalLabel').text(data.search_result_title);
+                        $('#downloadLinksList').empty();
+                        $.each(data.download_links, function (index, link) {
+                            $('#downloadLinksList').append('<li><i class="fas fa-cloud"></i> <a target="_blank" href="' + link.LINK + '">' + link.CLOUD + '</a></li>');
+                        });
+                                            // Open the modal
+                        $('#downloadModal').modal('show');
+                      },
+                      error: function(error) {
+                        // Handle errors
+                        console.error('Download error:', error);
+                        // You can handle errors here.
+                      }
+                    });
+                  });
             });
         </script>
   </body>
